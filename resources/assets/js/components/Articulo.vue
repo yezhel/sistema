@@ -47,12 +47,12 @@
                                       <i class="icon-pencil"></i>
                                     </button> &nbsp;
                                     <template v-if="articulo.condicion">
-                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarCategoria(articulo.id)">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="desactivarArticulo(articulo.id)">
                                             <i class="icon-trash"></i>
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <button type="button" class="btn btn-info btn-sm" @click="activarCategoria(articulo.id)">
+                                        <button type="button" class="btn btn-info btn-sm" @click="activarArticulo(articulo.id)">
                                             <i class="icon-check"></i>
                                         </button>
                                     </template>
@@ -290,29 +290,33 @@
                     console.log(error);
                 });
             },
-            actualizarCategoria(){
-                if(this.validarCategoria()){
+            actualizarArticulo(){
+                if(this.validarArticulo()){
                     return;
                 }
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.put('/categoria/actualizar',{
+                axios.put('/articulo/actualizar',{
+                    'idcategoria' : this.idcategoria,
+                    'codigo' : this.codigo,
                     'nombre' : this.nombre,
+                    'stock' : this.stock,
+                    'precio_venta' : this.precio_venta,
                     'descripcion' : this.descripcion,
-                    'id' : this.categoria_id
+                    'id' : this.articulo_id
 
                 }).then(function (response) {
                     //Si sale bien
                     me.cerrarModal();
-                    me.listarCategoria(1,'','nombre');
+                    me.listarArticulo(1,'','nombre');
 
                 }).catch(function (error) {
                     // handle error
                     console.log(error);
                 });
             },
-            desactivarCategoria(id){
+            desactivarArticulo(id){
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
@@ -320,7 +324,7 @@
                 })
 
                 swalWithBootstrapButtons({
-                    title: 'Estas seguro de desactivar esta categoría?',
+                    title: 'Estas seguro de desactivar este artículo?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -331,11 +335,11 @@
                     {
                         let me = this;
                         //envia datos por post a la URL dada, con los parametros dados
-                        axios.put('/categoria/desactivar',{
+                        axios.put('/articulo/desactivar',{
                             'id' : id
                         }).then(function (response) {
                             //Si sale bien
-                            me.listarCategoria(1,'','nombre');
+                            me.listarArticulo(1,'','nombre');
                             swalWithBootstrapButtons(
                                 'Desactivado!',
                                 'El registro ha sido desactivado con éxito.',
@@ -354,7 +358,7 @@
                         }
                 })
             },
-            activarCategoria(id){
+            activarArticulo(id){
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
@@ -362,7 +366,7 @@
                 })
 
                 swalWithBootstrapButtons({
-                    title: 'Estas seguro de activar esta categoría?',
+                    title: 'Estas seguro de activar este artículo?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -373,11 +377,11 @@
                     {
                         let me = this;
                         //envia datos por post a la URL dada, con los parametros dados
-                        axios.put('/categoria/activar',{
+                        axios.put('/articulo/activar',{
                             'id' : id
                         }).then(function (response) {
                             //Si sale bien
-                            me.listarCategoria(1,'','nombre');
+                            me.listarArticulo(1,'','nombre');
                             swalWithBootstrapButtons(
                                 'Activado!',
                                 'El registro ha sido activado con éxito.',

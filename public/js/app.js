@@ -49035,28 +49035,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
-        actualizarCategoria: function actualizarCategoria() {
-            if (this.validarCategoria()) {
+        actualizarArticulo: function actualizarArticulo() {
+            if (this.validarArticulo()) {
                 return;
             }
             var me = this;
 
             //envia datos por post a la URL dada, con los parametros dados
-            axios.put('/categoria/actualizar', {
+            axios.put('/articulo/actualizar', {
+                'idcategoria': this.idcategoria,
+                'codigo': this.codigo,
                 'nombre': this.nombre,
+                'stock': this.stock,
+                'precio_venta': this.precio_venta,
                 'descripcion': this.descripcion,
-                'id': this.categoria_id
+                'id': this.articulo_id
 
             }).then(function (response) {
                 //Si sale bien
                 me.cerrarModal();
-                me.listarCategoria(1, '', 'nombre');
+                me.listarArticulo(1, '', 'nombre');
             }).catch(function (error) {
                 // handle error
                 console.log(error);
             });
         },
-        desactivarCategoria: function desactivarCategoria(id) {
+        desactivarArticulo: function desactivarArticulo(id) {
             var _this = this;
 
             var swalWithBootstrapButtons = swal.mixin({
@@ -49066,7 +49070,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             swalWithBootstrapButtons({
-                title: 'Estas seguro de desactivar esta categoría?',
+                title: 'Estas seguro de desactivar este artículo?',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
@@ -49076,11 +49080,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (result.value) {
                     var me = _this;
                     //envia datos por post a la URL dada, con los parametros dados
-                    axios.put('/categoria/desactivar', {
+                    axios.put('/articulo/desactivar', {
                         'id': id
                     }).then(function (response) {
                         //Si sale bien
-                        me.listarCategoria(1, '', 'nombre');
+                        me.listarArticulo(1, '', 'nombre');
                         swalWithBootstrapButtons('Desactivado!', 'El registro ha sido desactivado con éxito.', 'success');
                     }).catch(function (error) {
                         // handle error
@@ -49090,7 +49094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 result.dismiss === swal.DismissReason.cancel) {}
             });
         },
-        activarCategoria: function activarCategoria(id) {
+        activarArticulo: function activarArticulo(id) {
             var _this2 = this;
 
             var swalWithBootstrapButtons = swal.mixin({
@@ -49100,7 +49104,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             swalWithBootstrapButtons({
-                title: 'Estas seguro de activar esta categoría?',
+                title: 'Estas seguro de activar este artículo?',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
@@ -49110,11 +49114,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (result.value) {
                     var me = _this2;
                     //envia datos por post a la URL dada, con los parametros dados
-                    axios.put('/categoria/activar', {
+                    axios.put('/articulo/activar', {
                         'id': id
                     }).then(function (response) {
                         //Si sale bien
-                        me.listarCategoria(1, '', 'nombre');
+                        me.listarArticulo(1, '', 'nombre');
                         swalWithBootstrapButtons('Activado!', 'El registro ha sido activado con éxito.', 'success');
                     }).catch(function (error) {
                         // handle error
@@ -49362,7 +49366,7 @@ var render = function() {
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
-                                      _vm.desactivarCategoria(articulo.id)
+                                      _vm.desactivarArticulo(articulo.id)
                                     }
                                   }
                                 },
@@ -49377,7 +49381,7 @@ var render = function() {
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
-                                      _vm.activarCategoria(articulo.id)
+                                      _vm.activarArticulo(articulo.id)
                                     }
                                   }
                                 },
