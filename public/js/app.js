@@ -3940,7 +3940,7 @@ window.Vue = __webpack_require__(39);
 
 //Esta creado un componente llamado 'example-component'
 Vue.component('categoria', __webpack_require__(42));
-Vue.component('articulo', __webpack_require__(53));
+Vue.component('articulo', __webpack_require__(48));
 
 var app = new Vue({
   el: '#app',
@@ -48651,24 +48651,19 @@ if (false) {
 }
 
 /***/ }),
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(54)
+  __webpack_require__(49)
 }
 var normalizeComponent = __webpack_require__(12)
 /* script */
-var __vue_script__ = __webpack_require__(56)
+var __vue_script__ = __webpack_require__(51)
 /* template */
-var __vue_template__ = __webpack_require__(57)
+var __vue_template__ = __webpack_require__(52)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -48707,13 +48702,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(50);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -48733,7 +48728,7 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(10)(false);
@@ -48747,7 +48742,7 @@ exports.push([module.i, "\n.model-content{\n    width: 100% !important;\n    pos
 
 
 /***/ }),
-/* 56 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49015,22 +49010,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //Envia la petición para visualizar la data de esta página
             me.listarArticulo(page, buscar, criterio);
         },
-        registrarCategoria: function registrarCategoria() {
-            if (this.validarCategoria()) {
+        registrarArticulo: function registrarArticulo() {
+            if (this.validarArticulo()) {
                 return;
             }
 
             var me = this;
 
             //envia datos por post a la URL dada, con los parametros dados
-            axios.post('/categoria/registrar', {
+            axios.post('/articulo/registrar', {
+                'idcategoria': this.idcategoria,
+                'codigo': this.codigo,
                 'nombre': this.nombre,
+                'stock': this.stock,
+                'precio_venta': this.precio_venta,
                 'descripcion': this.descripcion
 
             }).then(function (response) {
                 //Si sale bien
                 me.cerrarModal();
-                me.listarCategoria(1, '', 'nombre');
+                me.listarArticulo(1, '', 'nombre');
             }).catch(function (error) {
                 // handle error
                 console.log(error);
@@ -49125,22 +49124,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 result.dismiss === swal.DismissReason.cancel) {}
             });
         },
-        validarCategoria: function validarCategoria() {
+        validarArticulo: function validarArticulo() {
             //Inicializa las variables
-            this.errorCategoria = 0;
-            this.errorMostrarMsjCategoria = [];
+            this.errorArticulo = 0;
+            this.errorMostrarMsjArticulo = [];
 
-            if (!this.nombre) this.errorMostrarMsjCategoria.push("El nombre d ela categoria no puede estar vacio");
+            if (this.idcategoria == 0) this.errorMostrarMsjArticulo.push("Seleccione una categoria");
 
-            if (this.errorMostrarMsjCategoria.length) this.errorCategoria = 1;
+            if (!this.nombre) this.errorMostrarMsjArticulo.push("El nombre del artículo no puede estar vacio.");
 
-            return this.errorCategoria;
+            if (this.stock == 0) this.errorMostrarMsjArticulo.push("El stock del artículo debe ser un número y no puede estar vacio.");
+
+            if (this.precio_venta == 0) this.errorMostrarMsjArticulo.push("El precio de venta del artículo debe ser un número y no puede estar vacion");
+
+            if (this.errorMostrarMsjArticulo.length) this.errorArticulo = 1;
+
+            return this.errorArticulo;
         },
         cerrarModal: function cerrarModal() {
             this.modal = 0;
             this.tituloModal = '';
+            this.idcategoria = 0;
+            this.nombre_categoria = '';
+            this.codigo = '';
             this.nombre = '';
+            this.precio_venta = 0;
+            this.stock = 0;
             this.descripcion = '';
+            this.errorArticulo = 0;
         },
         abrirModal: function abrirModal(modelo, accion) {
             var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -49154,8 +49165,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                     //Cambiamos el valor de la variable modal
                                     this.modal = 1;
                                     this.tituloModal = 'Registrar Artículo';
-                                    this.nombre = '';
-                                    this.descripcion = '';
+                                    this.idcategoria = 0;
+
                                     this.tipoAccion = 1;
                                     break;
                                 }
@@ -49166,8 +49177,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                                     this.modal = 1;
                                     this.tituloModal = 'Actualizar Artículo';
                                     this.tipoAccion = 2;
-                                    this.categoria_id = data['id'];
+                                    this.articulo_id = data['id'];
+                                    this.idcategoria = data['idcategoria'];
+                                    this.codigo = data['codigo'];
                                     this.nombre = data['nombre'];
+                                    this.stock = data['stock'];
+                                    this.precio_venta = data['precio_venta'];
                                     this.descripcion = data['descripcion'];
                                     break;
                                 }
@@ -49183,7 +49198,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 57 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49681,7 +49696,7 @@ var render = function() {
                           staticClass: "form-control",
                           attrs: {
                             type: "text",
-                            placeholder: "Nombre de categoría"
+                            placeholder: "Nombre del artículo"
                           },
                           domProps: { value: _vm.nombre },
                           on: {
@@ -49857,7 +49872,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            _vm.registrarCategoria()
+                            _vm.registrarArticulo()
                           }
                         }
                       },
@@ -49873,7 +49888,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            _vm.actualizarCategoria()
+                            _vm.actualizarArticulo()
                           }
                         }
                       },

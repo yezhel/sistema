@@ -122,7 +122,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
-                                    <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de categoría">
+                                    <input type="text" v-model="nombre" class="form-control" placeholder="Nombre del artículo">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -153,8 +153,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarCategoria()">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarCategoria()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArticulo()">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArticulo()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -264,22 +264,26 @@
                 me.listarArticulo(page,buscar,criterio);
 
             },
-            registrarCategoria(){
-                if(this.validarCategoria()){
+            registrarArticulo(){
+                if(this.validarArticulo()){
                     return;
                 }
 
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.post('/categoria/registrar',{
+                axios.post('/articulo/registrar',{
+                    'idcategoria' : this.idcategoria,
+                    'codigo' : this.codigo,
                     'nombre' : this.nombre,
+                    'stock' : this.stock,
+                    'precio_venta' : this.precio_venta,
                     'descripcion' : this.descripcion
 
                 }).then(function (response) {
                     //Si sale bien
                     me.cerrarModal();
-                    me.listarCategoria(1,'','nombre');
+                    me.listarArticulo(1,'','nombre');
 
                 }).catch(function (error) {
                     // handle error
@@ -392,24 +396,41 @@
                         }
                 })
             },
-            validarCategoria(){
+            validarArticulo(){
                 //Inicializa las variables
-                this.errorCategoria = 0;
-                this.errorMostrarMsjCategoria = [];
+                this.errorArticulo = 0;
+                this.errorMostrarMsjArticulo = [];
+
+                if(this.idcategoria == 0 )
+                    this.errorMostrarMsjArticulo.push("Seleccione una categoria");
 
                 if(!this.nombre) 
-                    this.errorMostrarMsjCategoria.push("El nombre d ela categoria no puede estar vacio");
+                    this.errorMostrarMsjArticulo.push("El nombre del artículo no puede estar vacio.");
 
-                if(this.errorMostrarMsjCategoria.length)
-                    this.errorCategoria = 1;
+                if(this.stock == 0 )
+                    this.errorMostrarMsjArticulo.push("El stock del artículo debe ser un número y no puede estar vacio.");
 
-                return this.errorCategoria;
+                if(this.precio_venta == 0 )
+                    this.errorMostrarMsjArticulo.push("El precio de venta del artículo debe ser un número y no puede estar vacion");
+
+
+
+                if(this.errorMostrarMsjArticulo.length)
+                    this.errorArticulo = 1;
+
+                return this.errorArticulo;
             },
             cerrarModal(){
                 this.modal=0;
                 this.tituloModal = '';
+                this.idcategoria = 0;
+                this.nombre_categoria = '';
+                this.codigo = '';
                 this.nombre = '';
+                this.precio_venta = 0;
+                this.stock = 0;
                 this.descripcion = '';
+                this.errorArticulo = 0;
             },
             abrirModal(modelo, accion, data = []){
                 switch (modelo) {
@@ -421,8 +442,8 @@
                                 //Cambiamos el valor de la variable modal
                                 this.modal = 1;
                                 this.tituloModal = 'Registrar Artículo';
-                                this.nombre = '';
-                                this.descripcion = '';
+                                this.idcategoria = 0;
+                                 
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -433,8 +454,12 @@
                                 this.modal = 1;
                                 this.tituloModal = 'Actualizar Artículo';
                                 this.tipoAccion = 2;
-                                this.categoria_id = data['id'];
+                                this.articulo_id = data['id'];
+                                this.idcategoria = data['idcategoria'];
+                                this.codigo = data['codigo'];
                                 this.nombre = data['nombre'];
+                                this.stock = data['stock'];
+                                this.precio_venta = data['precio_venta'];
                                 this.descripcion = data['descripcion'];
                                 break;
                             }
