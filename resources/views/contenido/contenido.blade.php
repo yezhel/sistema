@@ -19,7 +19,7 @@
 		<h1>Contenido del menú 5</h1>
 	</template>
 	<template v-if="menu==6">
-		<h1>Contenido del menú 6</h1>
+		<cliente></cliente>
 	</template>
 	<template v-if="menu==7">
 		<h1>Contenido del menú 7</h1>
