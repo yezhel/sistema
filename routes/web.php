@@ -31,4 +31,4 @@ Route::put('/articulo/activar', 'ArticuloController@activar');
 
 Route::get('/cliente', 'ClienteController@index');
 Route::post('/cliente/registrar', 'ClienteController@store');
-Route::get('/cliente/actualizar', 'ClienteController@update');
+Route::put('/cliente/actualizar', 'ClienteController@update');
