@@ -7,4 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Persona extends Model
 {
     protected $fillable = ['nombre', 'tipo_documento','num_documento','direccion','telefono','email'];
+
+    //una persona esta relacionada con solo un proveedor
+    public function proveedor()
+    {
+    	return $this->hasOne('App\Proveedor');
+    }
 }
