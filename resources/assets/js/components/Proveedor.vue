@@ -89,6 +89,7 @@
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                            <br>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
@@ -127,6 +128,18 @@
                                 <label class="col-md-3 form-control-label" for="email-input">Email</label>
                                 <div class="col-md-9">
                                     <input type="email" v-model="email" class="form-control" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="contacto" class="form-control" placeholder="Nombre del contacto">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="email-input">Teléfono de contacto</label>
+                                <div class="col-md-9">
+                                    <input type="text" v-model="telefono_contacto" class="form-control" placeholder="Teléfono del contacto">
                                 </div>
                             </div>
                             <div v-show="errorPersona" class="form-group row div-error">
@@ -244,13 +257,15 @@
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.post('/cliente/registrar',{
+                axios.post('/proveedor/registrar',{
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direction' : this.direccion,
                     'telefono' : this.telefono,
-                    'email' : this.email
+                    'email' : this.email,
+                    'contacto' : this.contacto,
+                    'telefono_contacto' : this.telefono_contacto
 
                 }).then(function (response) {
                     //Si sale bien
@@ -269,13 +284,15 @@
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.put('/cliente/actualizar',{
+                axios.put('/proveedor/actualizar',{
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direction' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
+                    'contacto' : this.contacto,
+                    'telefono_contacto' : this.telefono_contacto,
                     'id' : this.persona_id
 
                 }).then(function (response) {
@@ -305,11 +322,13 @@
                 this.modal=0;
                 this.tituloModal = '';
                 this.nombre = '';
-                this.tipo_documento = 'DNI';
+                this.tipo_documento = 'RUC';
                 this.num_documento = '';
                 this.direccion = '';
                 this.telefono = '';
                 this.email = '';
+                this.contacto = '';
+                this.telefono_contacto = '';
                 this.errorPersona = 0;
             },
             abrirModal(modelo, accion, data = []){
@@ -321,13 +340,15 @@
                             {
                                 //Cambiamos el valor de la variable modal
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Cliente';
+                                this.tituloModal = 'Registrar Proveedor';
                                 this.nombre = '';
-                                this.tipo_documento = 'DNI';
+                                this.tipo_documento = 'RUC';
                                 this.num_documento = '';
                                 this.direccion = '';
                                 this.telefono = '';
                                 this.email = '';
+                                this.contacto = '';
+                                this.telefono_contacto = '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -336,7 +357,7 @@
                                 //console.log(data);
                                 //Muestra una ventana modal
                                 this.modal = 1;
-                                this.tituloModal = 'Actualizar cliente';
+                                this.tituloModal = 'Actualizar Proveedor';
                                 this.tipoAccion = 2;
                                 this.persona_id = data['id'];
                                 this.nombre = data['nombre'];
@@ -345,6 +366,8 @@
                                 this.direccion = data['direccion'];
                                 this.telefono = data['telefono'];
                                 this.email = data['email'];
+                                this.contacto = data['contacto'];
+                                this.telefono_contacto = data['telefono_contacto'];
                                 break;
                             }
                         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Proveedor;
+use App\Persona;
 use Illuminate\Support\Facades\DB;//PAra transacciones
 
 class ProveedorController extends Controller
@@ -67,7 +68,6 @@ class ProveedorController extends Controller
 	    	$persona->direccion = $request->direccion;
 	    	$persona->telefono = $request->telefono;
 	    	$persona->email = $request->email;
-
 	        $persona->save();
 
 	        $proveedor = new Proveedor();
@@ -77,9 +77,9 @@ class ProveedorController extends Controller
 	        $proveedor->save();
 
 	        DB::commit();
-        }
-        catch(Exception $e)
-        {
+
+
+        }catch(Exception $e){
         	DB::rollBack();
         }
     }
