@@ -36,7 +36,7 @@ class RolController extends Controller
                 'from'              => $roles->firstItem(),
                 'to'                => $roles->lastItem(),
             ],
-            'categorias'            => $roles
+            'roles'            => $roles
         ];
     }
 }
