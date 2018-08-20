@@ -17,6 +17,6 @@ class Persona extends Model
     public function user()
     {
     	//indica que una persona esta relacionada directamente con un usuario
-    	return $this->hasOne('App\User')
+    	return $this->hasOne('App\User');
     }
 }

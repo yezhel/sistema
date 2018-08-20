@@ -92,6 +92,7 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <br>
+                            <br>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                 <div class="col-md-9">
@@ -284,15 +285,16 @@
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.post('/proveedor/registrar',{
+                axios.post('/user/registrar',{
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direction' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
-                    'contacto' : this.contacto,
-                    'telefono_contacto' : this.telefono_contacto
+                    'usuario' : this.usuario,
+                    'password' : this.password,
+                    'idrol' : this.idrol
 
                 }).then(function (response) {
                     //Si sale bien
@@ -311,15 +313,16 @@
                 let me = this;
 
                 //envia datos por post a la URL dada, con los parametros dados
-                axios.put('/proveedor/actualizar',{
+                axios.put('/user/actualizar',{
                     'nombre' : this.nombre,
                     'tipo_documento' : this.tipo_documento,
                     'num_documento' : this.num_documento,
                     'direction' : this.direccion,
                     'telefono' : this.telefono,
                     'email' : this.email,
-                    'contacto' : this.contacto,
-                    'telefono_contacto' : this.telefono_contacto,
+                    'usuario' : this.usuario,
+                    'password' : this.password,
+                    'idrol' : this.idrol,
                     'id' : this.persona_id
 
                 }).then(function (response) {
@@ -339,6 +342,15 @@
 
                 if(!this.nombre) 
                     this.errorMostrarMsjPersona.push("El nombre de la persona no puede estar vacío.");
+
+                if(!this.usuario) 
+                    this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
+
+                if(!this.password) 
+                    this.errorMostrarMsjPersona.push("El password no puede estar vacío.");
+
+                if(this.idrol == 0) 
+                    this.errorMostrarMsjPersona.push("Debes seleccionar un rol para el usuario.");
 
                 if(this.errorMostrarMsjPersona.length)
                     this.errorPersona = 1;
