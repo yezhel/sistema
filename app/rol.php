@@ -12,4 +12,10 @@ class rol extends Model
     protected $fillable = ['nombre', 'descripcion','condicion'];
     //Deshabilitamos el timestamp
     public $timestamps = false;
+
+    public function users()
+    {
+    	//un rol puede tener varios usuarios
+    	return $this->hasMany('App\User');
+    } 
 }
