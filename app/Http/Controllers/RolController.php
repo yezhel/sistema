@@ -39,4 +39,14 @@ class RolController extends Controller
             'roles'            => $roles
         ];
     }
+
+    //Obtiene los roles activos
+    public function selectRol(Request $rquest)
+    {
+    	$roles = Rol::where('condicion', '=','1')
+    	->select('id','nombre')
+    	->orderBy('nombre','asc')->get();
+
+    	return ['roles' => $roles];
+    }
 }
