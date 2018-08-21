@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/main', function () {
     return view('contenido/contenido');
-});
+})->name('main');//alias main
 
 //Recibe la URL, la accion(controlador)
 Route::get('/categoria', 'CategoriaController@index');
@@ -45,6 +45,8 @@ Route::post('/user/registrar', 'UserController@store');
 Route::put('/user/actualizar', 'UserController@update');
 Route::put('/user/desactivar', 'UserController@desactivar');
 Route::put('/user/activar', 'UserController@activar');
-Auth::routes();
+
+Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::post('/login', 'Auth\LoginController@login')->name('login');//asigna un alias a la ruta
 
 Route::get('/home', 'HomeController@index')->name('home');
