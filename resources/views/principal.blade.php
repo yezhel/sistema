@@ -71,7 +71,18 @@
         </header>
 
         <div class="app-body">
-            @include('plantilla/sidebar')
+            {{-- Si el usuario actual esta autenticado --}}
+             @if(Auth::check())
+                @if(Auth::user()->idrol == 1){{--Si el usuario tiene el idrol==1, es un administrador--}}
+                    @include('plantilla.sidebaradministrador')
+                @elseif(Auth::user()->idrol == 2)
+                    @include('plantilla.sidebarvendedor')
+                @elseif(Auth::user()->idrol == 3)
+                    @include('plantilla.sidebaralmacenero')
+                @else
+
+                @endif
+             @endif
 
             <!-- Contenido Principal -->
             @yield('contenido')
