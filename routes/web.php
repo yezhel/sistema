@@ -19,6 +19,8 @@ Route::group(['middleware'=>['guest']], function(){
 //Gestionar todos los usuarios autenticados
 Route::group(['middleware'=>['auth']],function(){
 
+	Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+	
 	Route::get('/main', function () {
     	return view('contenido/contenido');
 	})->name('main');//alias main

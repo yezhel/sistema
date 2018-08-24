@@ -25,7 +25,7 @@ class LoginController extends Controller
 
         //redirecciona atras, withErrors para mostrar posibles errores en el login
         return back()
-            ->withErrors(['usuario' => trans('auth.failed')]);//identificador de la plantilla blade a mostrar y el error
+            ->withErrors(['usuario' => trans('auth.failed')])//identificador de la plantilla blade a mostrar y el error
             ->withInput(request(['usuario']));
     }
 
@@ -36,5 +36,14 @@ class LoginController extends Controller
             'usuario' => 'required|string',
             'password' => 'required|string'
         ]);
+    }
+
+    //cerrar sesion
+    public function logout(Request $request)
+    {
+        Auth::logout();//clase aut, metodo logout
+        $request->session()->invalidate();
+
+        return redirect('/');
     }
 }
