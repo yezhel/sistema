@@ -12,8 +12,8 @@ class ArticuloController extends Controller
     public function index( Request $request)
     {
         //Uso de elocuent
-        // if(!$request->ajax())
-        //     return redirect('/');
+        if(!$request->ajax())
+            return redirect('/');
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
@@ -45,6 +45,34 @@ class ArticuloController extends Controller
             ],
             'articulos'            => $articulos
         ];
+    }
+
+    public function listarArticulo( Request $request)
+    {
+        // Uso de elocuent
+        if(!$request->ajax())
+            return redirect('/');
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+
+        if($buscar == '')
+        {
+            $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
+                        ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
+                        ->orderBy('articulos.id','desc')->paginate(10);
+        } 
+        else
+        {
+            //Eloquent
+            $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
+                        ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
+                        ->where('articulos.'.$criterio, 'like', '%'. $buscar .'%')
+                        ->orderBy('articulos.id','desc')->paginate(10);
+        }
+        
+
+        return [ 'articulos' => $articulos];//Retorna un objeto llamado articulos
     }
 
     public function buscarArticulo(Request $request)
