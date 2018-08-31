@@ -58816,7 +58816,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.modal = 1;
             this.tituloModal = 'Seleccione uno o varios artículos';
         },
-        desactivarUsuario: function desactivarUsuario(id) {
+        desactivarIngreso: function desactivarIngreso(id) {
             var _this = this;
 
             var swalWithBootstrapButtons = swal.mixin({
@@ -58826,7 +58826,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             swalWithBootstrapButtons({
-                title: 'Estas seguro de desactivar este Usuario?',
+                title: 'Estas seguro de desactivar este ingreso?',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Aceptar',
@@ -58836,46 +58836,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (result.value) {
                     var me = _this;
                     //envia datos por post a la URL dada, con los parametros dados
-                    axios.put('/user/desactivar', {
+                    axios.put('/ingreso/desactivar', {
                         'id': id
                     }).then(function (response) {
                         //Si sale bien
-                        me.listarPersona(1, '', 'nombre');
-                        swalWithBootstrapButtons('Desactivado!', 'El registro ha sido desactivado con éxito.', 'success');
-                    }).catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    });
-                } else if ( // Read more about handling dismissals
-                result.dismiss === swal.DismissReason.cancel) {}
-            });
-        },
-        activarUsuario: function activarUsuario(id) {
-            var _this2 = this;
-
-            var swalWithBootstrapButtons = swal.mixin({
-                confirmButtonClass: 'btn btn-success',
-                cancelButtonClass: 'btn btn-danger',
-                buttonsStyling: false
-            });
-
-            swalWithBootstrapButtons({
-                title: 'Estas seguro de activar este usuario?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Aceptar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true
-            }).then(function (result) {
-                if (result.value) {
-                    var me = _this2;
-                    //envia datos por post a la URL dada, con los parametros dados
-                    axios.put('/user/activar', {
-                        'id': id
-                    }).then(function (response) {
-                        //Si sale bien
-                        me.listarPersona(1, '', 'nombre');
-                        swalWithBootstrapButtons('Activado!', 'El registro ha sido activado con éxito.', 'success');
+                        me.listarIngreso(1, '', 'num_comprobante');
+                        swalWithBootstrapButtons('Anulado!', 'El ingreso ha sido desactivado con éxito.', 'success');
                     }).catch(function (error) {
                         // handle error
                         console.log(error);
