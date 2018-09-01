@@ -239,17 +239,17 @@
                         <div class="form-group row border">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="">Proveedor(*)</label>
+                                    <label for="">Proveedor</label>
                                     <p v-text="proveedor"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label for="">Impuesto(*)</label>
+                                <label for="">Impuesto</label>
                                 <p v-text="impuesto"></p>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Tipo Comprobante(*)</label>
+                                    <label>Tipo Comprobante</label>
                                     <p v-text="tipo_comprobante"></p>
                                 </div>
                             </div>
@@ -261,7 +261,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Número Comprobante(*)</label>
+                                    <label>Número Comprobante</label>
                                     <p v-text="num_comprobante"></p>
                                 </div>
                             </div>
@@ -290,21 +290,21 @@
                                             </td>  
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Parcial</strong></td>
+                                            <td colspan="3" align="right"><strong>Total Parcial</strong></td>
                                             <td>${{totalParcial= (total-totalImpuesto).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Impuesto</strong></td>
-                                            <td>${{totalImpuesto=((total*impuesto)/(1+impuesto)).toFixed(2)}}</td>
+                                            <td colspan="3" align="right"><strong>Total Impuesto</strong></td>
+                                            <td>${{totalImpuesto=((total*impuesto)).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Neto</strong></td>
-                                            <td>$ {{total=calcularTotal}}</td>
+                                            <td colspan="3" align="right"><strong>Total Neto</strong></td>
+                                            <td>$ {{total}}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>
-                                            <td colspan="5">
+                                            <td colspan="4">
                                                 No hay artículos agregados
                                             </td>
                                         </tr>
@@ -729,8 +729,43 @@
                 this.listado = 1;
             },
             verIngreso(id){
+                let me = this;
                 this.listado = 2;
 
+                //Obtener los datos del ingreso
+                var arrayIngresoT = [];
+                var url = '/ingreso/obtenerCabecera?id=' + id;
+                // Make a request for a user with a given ID
+                axios.get(url).then(function (response) {
+                    // handle success
+                    var respuesta = response.data;
+                    arrayIngresoT = respuesta.ingreso;
+
+                    me.proveedor = arrayIngresoT[0]['nombre'];
+                    me.tipo_comprobante = arrayIngresoT[0]['tipo_comprobante'];
+                    me.serie_comprobante = arrayIngresoT[0]['serie_comprobante'];
+                    me.num_comprobante = arrayIngresoT[0]['num_comprobante'];
+                    me.impuesto = arrayIngresoT[0]['impuesto'];
+                    me.total = arrayIngresoT[0]['total'];
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+
+                //Obtener los datos de los detalles
+                var url = '/ingreso/obtenerDetalles?id=' + id;
+
+                axios.get(url).then(function (response) {
+                    // handle success
+                    var respuesta = response.data;
+                    me.arrayDetalle = respuesta.detalles;
+
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
 
             },
             cerrarModal(){
