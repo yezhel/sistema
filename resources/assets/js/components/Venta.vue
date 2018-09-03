@@ -94,13 +94,13 @@
                         <div class="form-group row border">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="">Proveedor(*)</label>
+                                    <label for="">Cliente(*)</label>
                                     <v-select
-                                        :on-search="selectProveedor"
+                                        :on-search="selectCliente"
                                         label="nombre"
-                                        :options="arrayProveedor"
-                                        placeholder="Buscar Proveedores..."
-                                        :onChange="getDatosProveedor"
+                                        :options="arrayCliente"
+                                        placeholder="Buscar Cliente..."
+                                        :onChange="getDatosCliente"
                                     ><!--Vue-select -->
                                     </v-select>
                                 </div>
@@ -133,16 +133,16 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div v-show="errorIngreso" class="form-group row div-error">
+                                <div v-show="errorVenta" class="form-group row div-error">
                                     <div class="text-center text-error">
-                                        <div v-for="error in errorMostrarMsjIngreso" :key="error" v-text="error">
+                                        <div v-for="error in errorMostrarMsjVenta" :key="error" v-text="error">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row border">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Artículo<span style="color:red;" v-show="idarticulo==0">(*Seleccione)</span></label>
                                     <div class="form-inline">
@@ -166,6 +166,12 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
+                                    <label>Descuento</label>
+                                    <input type="number" value="0" class="form-control" v-model="descuento">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <button @click="agregarDetalle()" class="btn btn-success form-control btnagregar"><i class="icon-plus"></i></button>  
                                 </div>
                             </div>
@@ -179,6 +185,7 @@
                                             <th>Artículo</th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
+                                            <th>Descuento</th>
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>
@@ -192,31 +199,34 @@
                                             <td v-text="detalle.articulo">
                                             </td>
                                             <td>
-                                                <input v-model="detalle.precio" type="number" value="3" class="form-control">
+                                                <input v-model="detalle.precio" type="number" class="form-control">
                                             </td>
                                             <td>
-                                                <input v-model="detalle.cantidad" type="number" value="2" class="form-control">
+                                                <input v-model="detalle.cantidad" type="number" class="form-control">
+                                            </td>
+                                             <td>
+                                                <input v-model="detalle.descuento" type="number" class="form-control">
                                             </td>
                                             <td>
                                                 {{detalle.precio*detalle.cantidad}}
                                             </td>  
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Parcial</strong></td>
+                                            <td colspan="5" align="right"><strong>Total Parcial</strong></td>
                                             <td>${{totalParcial= (total-totalImpuesto).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Impuesto</strong></td>
+                                            <td colspan="5" align="right"><strong>Total Impuesto</strong></td>
                                             <td>${{totalImpuesto=((total*impuesto)/(1+impuesto)).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="4" align="right"><strong>Total Neto</strong></td>
+                                            <td colspan="5" align="right"><strong>Total Neto</strong></td>
                                             <td>$ {{total=calcularTotal}}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>
-                                            <td colspan="5">
+                                            <td colspan="6">
                                                 No hay artículos agregados
                                             </td>
                                         </tr>
@@ -227,7 +237,7 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <button type="button" @click="ocultarDetalle()" class="btn btn-secondary">Cerrar</button>
-                                <button type="button" class="btn btn-primary" @click="registrarIngreso()">Registrar Compra</button>
+                                <button type="button" class="btn btn-primary" @click="registrarVenta()">Registrar Venta</button>
                             </div>
                         </div>
                     </div>
@@ -442,7 +452,8 @@
                 codigo: '',
                 articulo: '',
                 precio: 0,
-                cantidad: 0
+                cantidad: 0,
+                descuento: 0
             }
         },
         components: {
