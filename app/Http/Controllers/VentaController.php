@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\ Carbon;
-use app\Venta;
-use app\DetalleVenta;
+use App\Venta;
+use App\DetalleVenta;
 class VentaController extends Controller
 {
     public function index( Request $request)
@@ -56,13 +56,13 @@ class VentaController extends Controller
             return redirect('/');
 
         $id = $request->id;
-        $ingreso = Ingreso::join('personas','ingresos.idproveedor','=','personas.id')
-        ->join('users','ingresos.idusuario','=','users.id')
-        ->select('ingresos.id','ingresos.tipo_comprobante','ingresos.serie_comprobante','ingresos.num_comprobante','ingresos.fecha_hora','ingresos.impuesto','ingresos.total','ingresos.estado','personas.nombre','users.usuario')
-        ->where('ingresos.id','=',$id)
-        ->orderBy('ingresos.id', 'desc')->take(1)->get();
+        $venta = Venta::join('personas','ventas.idproveedor','=','personas.id')
+        ->join('users','ventas.idusuario','=','users.id')
+        ->select('ventas.id','ventas.tipo_comprobante','ventas.serie_comprobante','ventas.num_comprobante','ventas.fecha_hora','ventas.impuesto','ventas.total','ventas.estado','personas.nombre','users.usuario')
+        ->where('ventas.id','=',$id)
+        ->orderBy('ventas.id', 'desc')->take(1)->get();
         
-        return ['ingreso' => $ingreso ];
+        return ['venta' => $venta ];
     }
 
     public function obtenerDetalles(Request $request)
@@ -72,10 +72,10 @@ class VentaController extends Controller
             return redirect('/');
 
         $id = $request->id;
-        $detalles = DetalleIngreso::join('articulos','detalle_ingresos.idarticulo','=','articulos.id')
-        ->select('detalle_ingresos.cantidad','detalle_ingresos.precio','articulos.nombre as articulo')
-        ->where('detalle_ingresos.idingreso','=',$id)
-        ->orderBy('detalle_ingresos.id', 'desc')->get();
+        $detalles = DetalleVenta::join('articulos','detalle_ventas.idarticulo','=','articulos.id')
+        ->select('detalle_ventas.cantidad','detalle_ventas.precio','detalle_ventas.descuento','articulos.nombre as articulo')
+        ->where('detalle_ventas.idventa','=',$id)
+        ->orderBy('detalle_ventas.id', 'desc')->get();
         
         return ['detalles' => $detalles ]; 
     }
@@ -92,27 +92,28 @@ class VentaController extends Controller
 	        
 	        $mytime = Carbon::now('America/Mexico_City');
 
-	        $ingreso = new Ingreso();
-	        $ingreso->idproveedor = $request->idproveedor;
-	        $ingreso->idusuario = \Auth::user()->id;//id del usuario que esta autenticado
-	        $ingreso->tipo_comprobante = $request->tipo_comprobante;
-	        $ingreso->serie_comprobante = $request->serie_comprobante;
-	        $ingreso->num_comprobante = $request->num_comprobante;
-	        $ingreso->fecha_hora = $mytime->toDateString();
-	        $ingreso->impuesto = $request->impuesto;
-	        $ingreso->total = $request->total;
-	        $ingreso->estado = 'Registrado';
-	        $ingreso->save();
+	        $venta = new Venta();
+	        $venta->idcliente = $request->idcliente;
+	        $venta->idusuario = \Auth::user()->id;//id del usuario que esta autenticado
+	        $venta->tipo_comprobante = $request->tipo_comprobante;
+	        $venta->serie_comprobante = $request->serie_comprobante;
+	        $venta->num_comprobante = $request->num_comprobante;
+	        $venta->fecha_hora = $mytime->toDateString();
+	        $venta->impuesto = $request->impuesto;
+	        $venta->total = $request->total;
+	        $venta->estado = 'Registrado';
+	        $venta->save();
 
-	    	$detalles = $request->data;//Array de detalles
+	    	$detalles = $request->data;//Array de detalles, data se obtiene en el objeto request
 
 	    	foreach($detalles as $ep => $det)
 	    	{
-	    		$detalle = new DetalleIngreso();
-	    		$detalle->idingreso = $ingreso->id;
+	    		$detalle = new DetalleVenta();
+	    		$detalle->idventa = $venta->id;
 	    		$detalle->idarticulo = $det['idarticulo'];
 	    		$detalle->cantidad = $det['cantidad'];
 	    		$detalle->precio = $det['precio'];
+                $detalle->descuento = $det['descuento'];
 	    		$detalle->save();
 	    	}
 
@@ -130,8 +131,8 @@ class VentaController extends Controller
         if(!$request->ajax())
             return redirect('/');
 
-        $ingreso = Ingreso::findOrFail($request->id);
-        $ingreso->estado = 'Anulado';
-        $ingreso->save(); 
+        $venta = Venta::findOrFail($request->id);
+        $venta->estado = 'Anulado';
+        $venta->save(); 
     }
 }
