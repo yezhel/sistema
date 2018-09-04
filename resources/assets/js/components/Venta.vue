@@ -202,13 +202,16 @@
                                                 <input v-model="detalle.precio" type="number" class="form-control">
                                             </td>
                                             <td>
+                                                <!-- Si la cantidad es mayor al stock se muestra un mensaje en rojo -->
+                                                <span style="color:red" v-show="detalle.cantidad>detalle.stock">stock: {{detalle.stock}}</span>
                                                 <input v-model="detalle.cantidad" type="number" class="form-control">
                                             </td>
                                              <td>
+                                                <span style="color:red" v-show="detalle.descuento>(detalle.precio*detalle.cantidad)">Descuento superior</span>
                                                 <input v-model="detalle.descuento" type="number" class="form-control">
                                             </td>
                                             <td>
-                                                {{detalle.precio*detalle.cantidad}}
+                                                {{detalle.precio*detalle.cantidad-detalle.descuento}}
                                             </td>  
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
@@ -490,7 +493,7 @@
                 var resultado = 0.0;
                 for(var i=0; i< this.arrayDetalle.length;i++)
                 {
-                    resultado = resultado+(this.arrayDetalle[i].precio*this.arrayDetalle[i].cantidad);
+                    resultado = resultado+(this.arrayDetalle[i].precio*this.arrayDetalle[i].cantidad-this.arrayDetalle[i].descuento);
                 }
                 return resultado;
             }
@@ -603,25 +606,39 @@
                 {
                     if(me.encuentra(me.idarticulo))
                     {
-                        // swal({
-                        //     type: 'error',
-                        //     title: 'error...',
-                        //     text: 'Ese articulo ya se encuentra agregado!',
-                        // })
+                        swal({
+                            type: 'error',
+                            title: 'error...',
+                            text: 'Ese articulo ya se encuentra agregado!',
+                        })
                     }
                     else{
-                        me.arrayDetalle.push({
+                        if(me.cantidad > me.stock)
+                        {
+                           swal({
+                            type: 'error',
+                            title: 'error...',
+                            text: 'No hay stock disponible!',
+                        }) 
+                        }
+                        else{
+                            me.arrayDetalle.push({
                             idarticulo: me.idarticulo,
                             articulo: me.articulo,
                             cantidad: me.cantidad,
-                            precio: me.precio
+                            precio: me.precio,
+                            descuento : me.descuento,
+                            stock : me.stock
                         });
 
-                        me.codigo = "";
-                        me.idarticulo = 0;
-                        me.articulo = "";
-                        me.cantidad = 0;
-                        me.precio = 0;
+                            me.codigo = "";
+                            me.idarticulo = 0;
+                            me.articulo = "";
+                            me.cantidad = 0;
+                            me.precio = 0;
+                            me.descuento = 0;
+                            me.stock = 0
+                        }
                     }
                 }
             },
@@ -640,7 +657,9 @@
                         idarticulo: data['id'],
                         articulo: data['nombre'],
                         cantidad: 1,
-                        precio: 1
+                        precio: data['precio_venta'],
+                        descuento : 0,
+                        stock : data['stock']
                     });
                 }
             },
