@@ -252,8 +252,8 @@
                         <div class="form-group row border">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label for="">Proveedor</label>
-                                    <p v-text="proveedor"></p>
+                                    <label for="">Cliente</label>
+                                    <p v-text="cliente"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -287,37 +287,36 @@
                                             <th>Artículo</th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
+                                            <th>Descuento</th>
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="arrayDetalle.length">
                                         <tr v-for="detalle in arrayDetalle" :key="detalle.id"><!--Indica que detalle va a tener un index-->
-                                            <td v-text="detalle.articulo">
-                                            </td>
-                                            <td v-text="detalle.precio">
-                                            </td>
-                                            <td v-text="detalle.cantidad">
-                                            </td>
+                                            <td v-text="detalle.articulo"></td>
+                                            <td v-text="detalle.precio"></td>
+                                            <td v-text="detalle.cantidad"></td>
+                                            <td v-text="detalle.descuento"></td>
                                             <td>
-                                                {{detalle.precio*detalle.cantidad}}
+                                                {{detalle.precio*detalle.cantidad-detalle.descuento}}
                                             </td>  
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="3" align="right"><strong>Total Parcial</strong></td>
+                                            <td colspan="4" align="right"><strong>Total Parcial</strong></td>
                                             <td>${{totalParcial= (total-totalImpuesto).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="3" align="right"><strong>Total Impuesto</strong></td>
+                                            <td colspan="4" align="right"><strong>Total Impuesto</strong></td>
                                             <td>${{totalImpuesto=((total*impuesto)).toFixed(2)}}</td>
                                         </tr>
                                         <tr style="background-color:#CEECF5;">
-                                            <td colspan="3" align="right"><strong>Total Neto</strong></td>
+                                            <td colspan="4" align="right"><strong>Total Neto</strong></td>
                                             <td>$ {{total}}</td>
                                         </tr>
                                     </tbody>
                                     <tbody v-else>
                                         <tr>
-                                            <td colspan="4">
+                                            <td colspan="5">
                                                 No hay artículos agregados
                                             </td>
                                         </tr>
@@ -771,25 +770,26 @@
             ocultarDetalle(){
                 this.listado = 1;
             },
-            verIngreso(id){
+            verVenta(id){
                 let me = this;
                 this.listado = 2;
 
                 //Obtener los datos del ingreso
-                var arrayIngresoT = [];
-                var url = '/ingreso/obtenerCabecera?id=' + id;
+                var arrayVentaT = [];
+                var url = '/venta/obtenerCabecera?id=' + id;
                 // Make a request for a user with a given ID
                 axios.get(url).then(function (response) {
                     // handle success
+                    console.log(response.data);
                     var respuesta = response.data;
-                    arrayIngresoT = respuesta.ingreso;
+                    arrayVentaT = respuesta.venta;
 
-                    me.proveedor = arrayIngresoT[0]['nombre'];
-                    me.tipo_comprobante = arrayIngresoT[0]['tipo_comprobante'];
-                    me.serie_comprobante = arrayIngresoT[0]['serie_comprobante'];
-                    me.num_comprobante = arrayIngresoT[0]['num_comprobante'];
-                    me.impuesto = arrayIngresoT[0]['impuesto'];
-                    me.total = arrayIngresoT[0]['total'];
+                    me.cliente = arrayVentaT[0]['nombre'];
+                    me.tipo_comprobante = arrayVentaT[0]['tipo_comprobante'];
+                    me.serie_comprobante = arrayVentaT[0]['serie_comprobante'];
+                    me.num_comprobante = arrayVentaT[0]['num_comprobante'];
+                    me.impuesto = arrayVentaT[0]['impuesto'];
+                    me.total = arrayVentaT[0]['total'];
                 })
                 .catch(function (error) {
                     // handle error
@@ -797,9 +797,9 @@
                 });
 
                 //Obtener los datos de los detalles
-                var url = '/ingreso/obtenerDetalles?id=' + id;
+                var urld = '/venta/obtenerDetalles?id=' + id;
 
-                axios.get(url).then(function (response) {
+                axios.get(urld).then(function (response) {
                     // handle success
                     var respuesta = response.data;
                     me.arrayDetalle = respuesta.detalles;

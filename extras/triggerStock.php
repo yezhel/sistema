@@ -1,3 +1,4 @@
+//al crear un ingreso actualiza la base de datos 
 DELIMITER //
 CREATE TRIGGER tr_updStockIngreso AFTER INSERT ON detalle_ingresos
  FOR EACH ROW BEGIN
@@ -8,8 +9,8 @@ END
 DELIMITER ;
 
 
-//al crear un ingreso actualiza la base de datos 
 
+//Triger que actualiza cuando cancelas un ingreso
 
 DELIMITER //
 CREATE TRIGGER tr_updStockIngresoAnular AFTER UPDATE ON ingresos FOR EACH ROW 
@@ -23,5 +24,12 @@ end;
 //
 DELIMITER ;
 
-
-//Triger que actualiza cuando cancelas un ingreso
+//Actualiza la bd despues de hacer una venta
+DELIMITER //
+CREATE TRIGGER tr_updStockVenta AFTER INSERT ON detalle_ventas
+ FOR EACH ROW BEGIN
+ UPDATE articulos SET stock = stock - NEW.cantidad
+ WHERE articulos.id = NEW.idarticulo;
+END
+//
+DELIMITER ;
