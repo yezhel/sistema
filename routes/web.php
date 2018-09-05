@@ -65,6 +65,7 @@ Route::group(['middleware'=>['auth']],function(){
 
 		Route::get('/articulo/buscarArticuloVenta', 'ArticuloController@buscarArticuloVenta');
 		Route::get('/articulo/listarArticuloVenta', 'ArticuloController@listarArticuloVenta');
+		Route::get('/articulo/listarPdf', 'ArticuloController@listarPdf')->name('articulos_pdf');
 
 		Route::get('/venta', 'VentaController@index');
 		Route::post('/venta/registrar', 'VentaController@store');
@@ -91,6 +92,7 @@ Route::group(['middleware'=>['auth']],function(){
 		Route::get('/articulo/listarArticulo', 'ArticuloController@listarArticulo');
 		Route::get('/articulo/buscarArticuloVenta', 'ArticuloController@buscarArticuloVenta');
 		Route::get('/articulo/listarArticuloVenta', 'ArticuloController@listarArticuloVenta');
+		Route::get('/articulo/listarPdf', 'ArticuloController@listarPdf')->name('articulos_pdf');
 
 		Route::get('/proveedor', 'ProveedorController@index');
 		Route::post('/proveedor/registrar', 'ProveedorController@store');

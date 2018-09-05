@@ -49912,6 +49912,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -49989,6 +49992,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // handle error
                 console.log(error);
             });
+        },
+        cargarPdf: function cargarPdf() {
+            window.open(url('/articulo/listarPDF'), 'blank');
         },
         selectCategoria: function selectCategoria() {
             var me = this;
@@ -52972,6 +52978,23 @@ var render = function() {
             [
               _c("i", { staticClass: "icon-plus" }),
               _vm._v(" Nuevo\n                ")
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  _vm.cargarPdf()
+                }
+              }
+            },
+            [
+              _c("i", { staticClass: "icon-doc" }),
+              _vm._v(" Reporte\n                ")
             ]
           )
         ]),
