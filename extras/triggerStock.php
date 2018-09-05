@@ -33,3 +33,17 @@ CREATE TRIGGER tr_updStockVenta AFTER INSERT ON detalle_ventas
 END
 //
 DELIMITER ;
+
+
+//Trigger para actualizar stock al eliminar una venta
+DELIMITER //
+CREATE TRIGGER tr_updStockVentaAnular AFTER UPDATE ON ventas FOR EACH ROW
+BEGIN
+ UPDATE articulos a
+  JOIN detalle_ventas dv
+   ON dv.idarticulo = a.id
+  AND dv.idventa = NEW.id
+  SET a.stock = a.stock + dv.cantidad;
+end;
+//
+DELIMITER ;

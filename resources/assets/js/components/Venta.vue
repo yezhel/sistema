@@ -822,7 +822,7 @@
                 this.modal = 1;
                 this.tituloModal = 'Seleccione uno o varios artículos';
             },
-            desactivarIngreso(id){
+            desactivarVenta(id){
                 const swalWithBootstrapButtons = swal.mixin({
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
@@ -830,7 +830,7 @@
                 })
 
                 swalWithBootstrapButtons({
-                    title: 'Estas seguro de desactivar este ingreso?',
+                    title: 'Estas seguro de desactivar esta venta?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -841,14 +841,14 @@
                     {
                         let me = this;
                         //envia datos por post a la URL dada, con los parametros dados
-                        axios.put('/ingreso/desactivar',{
+                        axios.put('/venta/desactivar',{
                             'id' : id
                         }).then(function (response) {
                             //Si sale bien
-                            me.listarIngreso(1,'','num_comprobante');
+                            me.listarVenta(1,'','num_comprobante');
                             swalWithBootstrapButtons(
                                 'Anulado!',
-                                'El ingreso ha sido desactivado con éxito.',
+                                'La venta ha sido desactivado con éxito.',
                                 'success'
                             )
                         }).catch(function (error) {
