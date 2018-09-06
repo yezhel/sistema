@@ -112,6 +112,7 @@
         }
     </style>
     <body>
+        @foreach($venta as $v)
         <header>
             <div id="logo">
                 <img src="img/logo2.png" alt="incanatoIT" id="imagen">
@@ -122,8 +123,8 @@
                 </p>
             </div>
             <div id="fact">
-                <p>Factura<br>
-                0001-0004</p>
+                <p>{{$v->tipo_comprobante}}<br>
+                {{$v->serie_comprobante}}-{{$v->num_comprobante}}</p>
             </div>
         </header>
         <br>
@@ -137,16 +138,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th><p id="cliente">Sr(a). Juan Carlos Arcila Díaz<br>
-                            Documento: 47715777<br>
-                            Dirección: Zarumilla 113 - Chiclayo<br>
-                            Teléfono: 931742904<br>
-                            Email: jcarlos.ad7@gmail.com</p></th>
+                            <th><p id="cliente">Sr(a). {{$v->nombre}}<br>
+                            {{$v->tipo_documento}}: {{$v->num_documento}}<br>
+                            Dirección: {{$v->direccion}}<br>
+                            Teléfono: {{$v->telefono}}<br>
+                            Email: {{$v->email}}</p></th>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
+        @endforeach
         <br>
         <section>
             <div>
@@ -159,8 +161,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>vendedor</td>
-                            <td>fecha</td>
+                            <td>{{$v->usuario}}</td>
+                            <td>{{$v->created_at}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -180,36 +182,40 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($detalles as $det)
                         <tr>
-                            <td>cant</td>
-                            <td>descripcion del producto descripcion del producto descripcion del producto</td>
-                            <td>precio uni</td>
-                            <td>descuento</td>
-                            <td>precio total</td>
+                            <td>{{$det->cantidad}}</td>
+                            <td>{{$det->articulo}}</td>
+                            <td>{{$det->precio}}</td>
+                            <td>{{$det->descuento}}</td>
+                            <td>{{$det->cantidad*$det->precio-$det->descuento}}</td>
                         </tr>
+                        @endforeach
                     </tbody>
                     <tfoot>
+                        @foreach($venta as $v)
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th>SUBTOTAL</th>
-                            <td>subtotal</td>
+                            <td>$ {{round($v->total-($v->total*$v->impuesto),2)}}</td>
                         </tr>
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th>IVA</th>
-                            <td>iva</td>
+                            <td>$ {{round($v->total*$v->impuesto,2)}}</td>
                         </tr>
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th>TOTAL</th>
-                            <td>total</td>
+                            <td>$ {{$v->total}}</td>
                         </tr>
+                        @endforeach
                     </tfoot>
                 </table>
             </div>
