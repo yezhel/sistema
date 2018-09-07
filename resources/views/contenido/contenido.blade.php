@@ -30,7 +30,7 @@
 				<rol></rol>
 			</template>
 			<template v-if="menu==9">
-				<h1>Reporte de ingresos</h1>
+				<consultaingreso></consultaingreso>
 			</template>
 			<template v-if="menu==10">
 				<h1>Reporte de ventas</h1>
@@ -77,7 +77,7 @@
 				<proveedor></proveedor>
 			</template>
 			<template v-if="menu==9">
-				<h1>Reporte de ingresos</h1>
+				<consultaingreso></consultaingreso>
 			</template>
 			<template v-if="menu==11">
 				<h1>Ayuda</h1>
