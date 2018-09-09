@@ -30,7 +30,7 @@ class NotifyAdmin extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     public function toDatabase($notifiable)
@@ -40,6 +40,14 @@ class NotifyAdmin extends Notification
         ];
     }
 
+    public function toBroadcast($notifiable)
+    {
+        return [
+            'data'=> [
+                'datos' => $this->GlobalDatos
+            ]
+        ];
+    }
     /**
      * Get the mail representation of the notification.
      *
